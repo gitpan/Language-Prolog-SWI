@@ -1,0 +1,13 @@
+- exception handling
+
+- overloading of ==, integration into Perl?
+
+- shorter namespace?
+
+- examples directory
+
+- more test cases
+
+- separate swig and distribute only with SWI_wrap.cxx?
+
+

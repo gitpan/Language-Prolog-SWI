@@ -1,0 +1,6 @@
+Revision history for Perl extension Language::Prolog::SWI.
+
+0.01  Sat Aug 31 08:26:22 2002
+	- first workable version, rather flaky unless you understand
+	  the C++ implementation
+

@@ -1,0 +1,89 @@
+Language/Prolog/SWI
+===================
+
+This is a wrapper package for the Prolog C/C++ implementation SWI-Prolog
+
+  http://www.swi-prolog.org/
+
+PREREQUISITES
+
+To build and run this extension you need the following
+
+  - SWI-Prolog (from the URL above), any 5.0.x version should do
+
+    Note: Debian users should install
+
+    apt-get install swi-prolog
+    apt-get install swi-prolog-clib
+    apt-get install swi-prolog-doc
+
+  - libtool
+
+    Note: Debian users should install
+
+    apt-get install libtool              - Generic library support script
+    apt-get install libtool-doc          - Generic library support script
+
+  - SWI-Prolog shareable object (see the HINTS file)
+
+    You will need the sources for SWI-Prolog for that. Sorry, no debianization yet
+
+  - SWIG (only necessary for building)
+
+    Note: Debian users should install
+
+    apt-get install swig1.3              - Generate scripting interfaces to C/C++ code.
+    apt-get install swig1.3-examples     - Examples for applications of SWIG.
+
+
+INSTALLATION
+
+To install this module do the following:
+
+- check the prerequisites above
+
+- edit Makefile.PL and set the variable TOP to where SWIG maintains
+  its examples:
+
+     If you have installed from the sources, this might be
+
+         /usr/local/src/SWIG-1.3.14/Examples/
+
+     If you installed via Debian then the usual place is
+
+         /usr/doc/swig1.3/examples
+
+     You should gunzip the Makefile:
+
+         gunzip Makefile.gz
+
+- do the usual thing:
+
+   perl Makefile.PL
+   make
+   make test
+   make install
+
+CONTENT
+
+  - Perl packages
+      Language::Prolog::SWI::base (introduction, top level)
+      Language::Prolog::SWI       (real wrapper package)
+
+  - C++ class definition SWIProlog.cpp
+
+  - SWIG interface file SWI.i
+
+  - patch for Makefile to build shareable objects
+
+DOCUMENTATION
+
+  - look at the Language::Prolog::SWI::base man page
+  - The C++ API itself is documented at
+
+        http://www.swi-prolog.org/packages/pl2cpp.html
+
+COPYRIGHT
+
+(C) 2002 rho@bond.edu.au
+

@@ -1,0 +1,42 @@
+0a1
+> # Generated automatically from Makefile.in by configure.
+41,42c42,43
+< srcdir=../src
+< vpath %.c ../src
+---
+> srcdir=.
+> vpath %.c .
+44c45
+< PLBASE=$(prefix)/lib/pl-$(PLVERSION)
+---
+> PLBASE=$(prefix)/lib/swi-prolog
+62c63
+< ARCH=i586-linux-gnu
+---
+> ARCH=i386
+100a102,110
+> 
+> LOBJ=	pl-atom.lo pl-wam.lo pl-stream.lo pl-error.lo pl-arith.lo pl-bag.lo \
+> 	pl-comp.lo pl-rc.lo pl-dwim.lo pl-ext.lo pl-file.lo pl-flag.lo \
+> 	pl-fmt.lo pl-funct.lo pl-gc.lo pl-glob.lo pl-itf.lo pl-list.lo \
+> 	pl-load.lo pl-modul.lo pl-op.lo pl-os.lo pl-prims.lo pl-pro.lo \
+> 	pl-proc.lo pl-prof.lo pl-read.lo pl-rec.lo pl-rl.lo pl-setup.lo \
+> 	pl-sys.lo pl-table.lo pl-trace.lo pl-util.lo pl-wic.lo pl-write.lo \
+> 	pl-term.lo pl-buffer.lo pl-thread.lo pl-xterm.lo \
+> 	pl-feature.lo pl-ctype.lo pl-main.lo
+102a113
+> RCLOBJ=	rc/access.lo rc/build.lo rc/html.lo rc/rc.lo rc/util.lo
+137,138c148,154
+< .c.o:
+< 	$(CC) -c -I. -I$(srcdir) -I$(srcdir)/rc $(CFLAGS) $< -o $@
+---
+> .SUFFIXES: .lo
+> 
+> .c.lo:
+> 	libtool --mode=compile $(CC) -c -I. -I$(srcdir) -I$(srcdir)/rc $(CFLAGS) $< -o $@
+> 
+> shared: $(LOBJ) $(RCLOBJ)
+> 	libtool --mode=link $(CC)  -g -O2   -o libpl.la -rpath /usr/local/lib -version-info 5:0:0 $(LOBJ) $(RCLOBJ)
+155a172,173
+> pl2:		
+> 		g++ $(LDFLAGS) -o pl2 $(ALLOBJ) -L.libs -lpl $(LIBS)

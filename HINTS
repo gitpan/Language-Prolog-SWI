@@ -1,0 +1,73 @@
+1) How to build the shareable objects for SWI-Prolog?
+
+My knowledge in this area is pretty limited and I am sure there
+is a more elegant way to do it with autoconf and friends. Anyway
+this is how I hacked it:
+
+   - in the pl-5.0.x sources I added/changed to src/Makefile the following rules
+     as can be found in the support/SWI-Prolog-Makefile.patch:
+
+....
+
+shared:
+	libtool --mode=link $(CC)  -g -O2   -o libpl.la -rpath /usr/local/lib -version-info 5:0:0 $(LOBJ) $(RCLOBJ)
+                                                                                                ^
+                                                                                                |
+     Note: Here I am using libtool (have a look) to do _all_ the work.                          |
+                                                                                                |
+     Note: You may have to change the minor version number -------------------------------------+
+
+     Note: You need the TABs above as it is a Makefile !!
+
+   - when you do in the src directory a
+
+        make shared
+
+     then it will build all sorts of libraries (static, relocatable, shared, ...) in a src/.libs directory.
+
+   - copy/move the libpl.so.5.0.x into /usr/local/lib so that it looks like
+
+       lrwxrwxrwx    1 root     staff          10 Jul 13 17:15 /usr/local/lib/libpl.so -> libpl.so.5
+       lrwxrwxrwx    1 root     staff          14 Jul 13 17:15 /usr/local/lib/libpl.so.5 -> libpl.so.5.0.0
+       -rwxr-xr-x    1 root     root       492600 Jul 13 19:09 /usr/local/lib/libpl.so.5.0.0
+
+   - To let other programs (as SWIProlog.so, the SWIG generated) use this shiny libpl.so library, I
+     have told the dynamic linker system to look at /usr/local/lib as well:
+
+       rho@namod: more /etc/ld.so.conf        # edit this
+       /usr/X11R6/lib
+       /usr/local/lib
+       rho@namod: ldconfig                    # let the OS know
+
+That should be it.
+
+2) I have problems with the shared library. How can I test it?
+
+   - to see whether the .libs/libpl.so works, I tried to build a new pl binary with it. I called it
+     pl2 in the Makefile:
+
+pl2:
+        g++ $(LDFLAGS) -o pl2 $(ALLOBJ) -L.libs -lpl $(LIBS)
+
+     [ I got rid of this rc/.. library by linking EVERYTHING prolog related into the .so file (see above) ]
+
+   - When you start pl2 it only works if you have some 'resource file'. I have no idea what this is,
+     but if you clone one with
+
+        cp boot32.prc pl2.prc
+
+     it seems to be happy. This has to be understood and cleaned up.
+
+3) I see errors like [FATAL ERROR: Could not find system resources] when initializing the Prolog engine.
+
+   SWI cannot find any resource file. While you can have your own (see SWI Prolog documentation) the
+   Perl wrapper will fall back to the resource which are shipped with SWI-Prolog itself.
+
+   Either you manually set the environment variable SWI_HOME_DIR on a shell or you set it within
+   Perl itself:
+
+      $ENV{SWI_HOME_DIR} = '/usr/lib/swi-prolog/'; # for Debian
+
+   Above is the default as defined in SWI.pm
+
+   

@@ -1,0 +1,12 @@
+Changes
+Makefile.PL
+MANIFEST
+README
+HINTS
+TODOS
+SWI/base.pm
+SWIProlog.cpp
+SWI.pm
+SWI.i
+t/01all.t
+support/SWI-Prolog-Makefile.patch
